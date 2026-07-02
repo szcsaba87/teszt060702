@@ -11,6 +11,10 @@ origins = [
     "http://localhost:5173"
 ]
 
+url = "https://gvdoqepfoqlwlkdrplzv.supabase.co"
+key = "sb_publishable_DbqVd2S52mKdqEIziWS2-w_tNL0wM-T"  # use env vars in real code, don't hardcode
+supabase: Client = create_client(url, key)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -30,9 +34,7 @@ def get_adatok():
 
 @app.get("/api/sql")
 def get_sql():
-    url = "https://gvdoqepfoqlwlkdrplzv.supabase.co"
-    key = "sb_publishable_DbqVd2S52mKdqEIziWS2-w_tNL0wM-T"  # use env vars in real code, don't hardcode
-    supabase: Client = create_client(url, key)
+
 
     response = (
         supabase.table("players")
@@ -40,5 +42,4 @@ def get_sql():
         .execute()
     )
 
-    data = response.data    
-    return "GOLYOCSKA"
+    return {"statusz": "success", "data": response.data}
