@@ -35,7 +35,6 @@ def get_adatok():
 @app.get("/api/sql")
 def get_sql():
 
-    return {"message": "SQL endpoint works"}
     response = (
         supabase.table("players")
         .select("*")
