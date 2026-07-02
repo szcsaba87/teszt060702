@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 
@@ -52,8 +52,19 @@ def get_sql():
 
 @app.get("/api/scraper")
 def get_scraper():
-    url = 'https://www.transfermarkt.com/ferencvarosi-tc/rekordabgaenge/verein/279/saison_id/'
-    response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
-    return {"statusz": "success", "data" : response}
+    target_url = "https://www.transfermarkt.com/ferencvarosi-tc/rekordabgaenge/verein/279/saison_id/"
+
+    try:
+        response = requests.get(target_url, headers=HEADERS, timeout=30)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    return {
+        "statusz": "success",
+        "status_code": response.status_code,
+        "html_length": len(response.text),
+        "title": soup.title.string if soup.title else None
+    }
