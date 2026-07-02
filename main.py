@@ -1,26 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import requests
+from supabase import create_client, Client
 
 app = FastAPI()
 
-# --- CORS BEÁLLÍTÁS ---
-# Ide írd be a Render-en futó React oldalad pontos URL-jét!
-# Teszteléshez a ["*"] is működik (mindenkit engedélyez), de élesben jobb a pontos URL.
+#origins = ["*"]
 
 origins = [
     "https://teszt260701.onrender.com",
     "http://localhost:5173"
 ]
 
-#origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"], # Minden HTTP metódust engedélyez (GET, POST, stb.)
-    allow_headers=["*"], # Minden fejlécet engedélyez
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/api/adatok")
@@ -31,3 +27,18 @@ def get_adatok():
     
     kulso_adat = {"uzenet": "Szia! Ez az adat a Python backendről jön!", "statusz": "sikeres"}
     return kulso_adat
+
+@app.get("/api/sql")
+def get_sql():
+    url = "https://gvdoqepfoqlwlkdrplzv.supabase.co"
+    key = "sb_publishable_DbqVd2S52mKdqEIziWS2-w_tNL0wM-T"  # use env vars in real code, don't hardcode
+    supabase: Client = create_client(url, key)
+
+    response = (
+        supabase.table("players")
+        .select("*")
+        .execute()
+    )
+
+    data = response.data    
+    return data
