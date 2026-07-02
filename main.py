@@ -35,11 +35,7 @@ app.add_middleware(
 )
 
 @app.get("/api/adatok")
-def get_adatok():
-    # Itt van az a részed, ami lekéri a külső adatot
-    # Példa egy fiktív külső API-val:
-    # kulso_adat = requests.get("https://api.example.com/data").json()
-    
+def get_adatok():   
     kulso_adat = {"uzenet": "Szia! Ez az adat a Python backendről jön!", "statusz": "sikeres"}
     return kulso_adat
 
@@ -60,4 +56,4 @@ def get_scraper():
     response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
-    return {"statusz": "success", "data" : soup}
+    return {"statusz": "success", "data" : response}
