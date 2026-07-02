@@ -52,13 +52,12 @@ def get_sql():
     )
     return {"statusz": "success", "data": response.data}
 
+
+
 @app.get("/api/scraper")
 def get_scraper():
-
-
     url = 'https://www.transfermarkt.com/ferencvarosi-tc/rekordabgaenge/verein/279/saison_id/'
     response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
-
     return {"statusz": "success", "data" : soup}
