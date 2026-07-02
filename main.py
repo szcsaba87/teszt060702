@@ -41,4 +41,4 @@ def get_sql():
     )
 
     data = response.data    
-    return data
+    return "GOLYOCSKA"
